@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background-color: #0F0F0F;
+}
+
+.bg-image-roundbg {
+  height: 100vh;
+  background-image: url('../../public/roundbg.png');
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+.text-gradient {
+    background-image: linear-gradient(111.54deg, rgba(110, 165, 226, 0.97) 57.17%, rgba(80, 93, 192, 0.97) 71.36%);
+    background-size: 100%;
+    background-repeat: repeat;
+    font-weight: bold;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+}
+
+.bright {
+  text-shadow: 0 0 4px #6795da;
+}
