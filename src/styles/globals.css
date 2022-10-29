@@ -9,11 +9,22 @@ body {
   background-color: #0F0F0F;
 }
 
-.bg-image-roundbg {
-  height: 100vh;
-  background-image: url('../../public/roundbg.png');
-  background-repeat: no-repeat;
-  background-position: center left;
+@layer base {
+  .bg-image-roundbg {
+    height: 100vh;
+    background-image: url('../../public/roundbg.png');
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: unset;
+  }
+
+  .bg-image-roundbg-mobile {
+    height: 100vh;
+    background-image: url('../../public/roundbg.png');
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: 33%;
+  }
 }
 
 .text-gradient {
@@ -29,4 +40,26 @@ body {
 
 .bright {
   text-shadow: 0 0 4px #6795da;
+}
+
+.changeText:before {
+  content: "code";
+  color: #b9ddff;
+  animation: changetxt 6s infinite;
+}
+
+@keyframes changetxt {
+
+  0% {
+    content: "code";
+  }
+
+  50% {
+    content: "notes";
+  }
+
+  80% {
+    content: "thoughts";
+  }
+
 }
