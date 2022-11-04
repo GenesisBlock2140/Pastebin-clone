@@ -4,13 +4,35 @@ import { trpc } from "../utils/trpc";
 
 import Card from '../../components/Card';
 import Footer from '../../components/Footer';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 
 const Home: NextPage = () => {
+
   const [characters, setCharacters] = useState<number>(0);
+  const textAreaEl = useRef<HTMLTextAreaElement>(null);
+  const notesInfos = trpc.notes.getNote.useQuery({})
+  const mutation = trpc.notes.createNote.useMutation({
+    onSuccess() {
+      notesInfos.refetch();
+      setIsError(false)
+    },
+    onError(err) {
+      setIsError(true)
+      console.log(err.data?.httpStatus);
+    }
+  })
+
+  const [isError,setIsError] = useState<boolean>(false)
 
   const handleTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCharacters(e.currentTarget.value.length)
+  }
+
+  // Trigger create new note, send data to trpc server
+  const handleCreateNote = async () => {
+    if (characters > 0 && characters < 100 && textAreaEl.current) {
+      await mutation.mutate({text: textAreaEl.current?.value})
+    }
   }
 
   return (
@@ -29,14 +51,17 @@ const Home: NextPage = () => {
               <h1 className='text-[25px] sm:text-[30px] text-white font-semibold mb-4 bright'>Publish and Share your <span className='changeText'> </span></h1>
               <p className='text-[15px] text-white opacity-60'>Phasellus dapibus finibus mattis. Integer pulvinar rutrum arcu, vitae sagittis lorem bibendum nec. Cras tempus ullamcorper diam, sagittis luctus quam accumsan sed.</p>
               <h2 className='text-[20px] font-semibold text-white mt-12 mb-6'>Last notes</h2>
-              <Card title='Title here blabla' date='11/11/22'/>
-              <Card title='Title here blabla' date='11/11/22'/>
-              <Card title='Title here blabla' date='11/11/22'/>
+              {notesInfos && notesInfos.data?.map((data) => {
+                return (
+                  <Card key={data.id} title={data.text.slice(0,28)} date={data.createdAt}/>
+                )
+              })}
             </div>
             <div>
-              <textarea className='block w-[90%] h-[500px] rounded-3xl p-2 mx-auto' onChange={(e) => {handleTextArea(e)}} />
+              {isError && <p className='text-white'>ERROR</p>}
+              <textarea ref={textAreaEl} className='block w-[90%] h-[500px] rounded-3xl p-2 mx-auto' onChange={(e) => {handleTextArea(e)}} />
               <div className='grid grid-cols-2'>
-                <button className='w-[150px] bg-[#6795da] text-white rounded-2xl p-2 my-5 ml-8'>{"Publish >>"}</button>
+                <button className='w-[150px] bg-[#6795da] text-white rounded-2xl p-2 my-5 ml-8' onClick={handleCreateNote} >{"Publish >>"}</button>
                 <p className='text-white m-auto'>{`${characters} / 1500`}</p>
               </div>
             </div>
