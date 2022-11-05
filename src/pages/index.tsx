@@ -10,7 +10,7 @@ const Home: NextPage = () => {
 
   const [characters, setCharacters] = useState<number>(0);
   const textAreaEl = useRef<HTMLTextAreaElement>(null);
-  const notesInfos = trpc.notes.getNote.useQuery({})
+  const notesInfos = trpc.notes.getThreeNote.useQuery({})
   const mutation = trpc.notes.createNote.useMutation({
     onSuccess() {
       notesInfos.refetch();
@@ -53,7 +53,7 @@ const Home: NextPage = () => {
               <h2 className='text-[20px] font-semibold text-white mt-12 mb-6'>Last notes</h2>
               {notesInfos && notesInfos.data?.map((data) => {
                 return (
-                  <Card key={data.id} title={data.text.slice(0,28)} date={data.createdAt}/>
+                  <Card key={data.id} title={data.text.slice(0,28)} date={data.createdAt} id={data.id}/>
                 )
               })}
             </div>
