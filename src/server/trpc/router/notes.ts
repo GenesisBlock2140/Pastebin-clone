@@ -2,8 +2,20 @@ import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 
 export const notesRouter = router({
-    // Read DB and get 3 last notes created
+    // Read DB and get the selected note 
     getNote: publicProcedure
+    .input(z.object({noteId: z.string().nullish()}))
+    .query(({input, ctx}) => {
+      if(input.noteId){
+        return ctx.prisma.notes.findUnique({
+          where: {
+            id: input.noteId
+          },
+        });
+      }
+    }),
+    // Read DB and get 3 last notes created
+    getThreeNote: publicProcedure
       .input(z.object({}))
       .query(({ctx}) => {
         return ctx.prisma.notes.findMany({
