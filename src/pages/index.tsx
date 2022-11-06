@@ -13,6 +13,9 @@ const Home: NextPage = () => {
   const notesInfos = trpc.notes.getThreeNote.useQuery({})
   const mutation = trpc.notes.createNote.useMutation({
     onSuccess() {
+      if (textAreaEl.current != null) {
+        textAreaEl.current.value = ""
+      }
       notesInfos.refetch();
       setIsError(false)
     },
