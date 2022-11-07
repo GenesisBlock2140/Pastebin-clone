@@ -19,9 +19,8 @@ const Home: NextPage = () => {
       notesInfos.refetch();
       setIsError(false)
     },
-    onError(err) {
+    onError() {
       setIsError(true)
-      console.log(err.data?.httpStatus);
     }
   })
 
@@ -33,8 +32,10 @@ const Home: NextPage = () => {
 
   // Trigger create new note, send data to trpc server
   const handleCreateNote = async () => {
-    if (characters > 0 && characters < 100 && textAreaEl.current) {
+    if (characters > 0 && characters < 1500 && textAreaEl.current) {
       await mutation.mutate({text: textAreaEl.current?.value})
+    } else {
+      setIsError(true)
     }
   }
 
